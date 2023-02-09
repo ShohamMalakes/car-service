@@ -28,10 +28,10 @@ export const vehicleRouter = createTRPCRouter({
       const technicalData =
         (await technicalDataRes.json()) as TechnicalVehicleRes;
 
+      console.log(basicData, technicalData);
       return {
         basicData: basicData.result.records[0],
         technicalData: technicalData.result.records[0],
       };
     }),
 });
-
