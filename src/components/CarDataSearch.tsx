@@ -20,6 +20,7 @@ import carPlateImg from "../images/car_plate1.png";
 function CarDataSearch() {
   const [carNumber, setCarNumber] = useState<string>();
   const [carData, setCarData] = useState<BasicVehicle>();
+  const [technicalCarData, setTechnicalCarData] = useState<TechnicalVehicle>();
 
   const { data, refetch } = api.vehicle.getData.useQuery(
     {
@@ -28,6 +29,7 @@ function CarDataSearch() {
     {
       onSuccess(response) {
         setCarData(response.basicData);
+        setTechnicalCarData(response.technicalData);
       },
       enabled: false,
       refetchOnWindowFocus: false,
@@ -35,7 +37,7 @@ function CarDataSearch() {
     }
   );
 
-  const carNumberLenghth = carNumber?.length;
+  const carNumberLength = carNumber?.length;
   return (
     <>
       <Flex justify={"center"}>
@@ -65,13 +67,13 @@ function CarDataSearch() {
           ></Input>
           <Button
             isDisabled={
-              !carNumber || carNumberLenghth! < 5 || carNumberLenghth! > 8
+              !carNumber || carNumberLength! < 5 || carNumberLength! > 8
             }
             onClick={refetch}
           >
             מצא רכב
           </Button>
-          {(carNumberLenghth! < 5 || carNumberLenghth! > 8) && (
+          {(carNumberLength! < 5 || carNumberLength! > 8) && (
             <Text>מספר רכב צריך להיות בין 5-8 תווים</Text>
           )}
           <Button isDisabled>הוסף לרכבים שלי</Button>
@@ -177,8 +179,36 @@ function CarDataSearch() {
               </GridItem>
             </Grid>
           </Card>
-          <Card boxSize={"md"} bg={"green"}>
-            3
+          <Card boxSize={"md"} bg={"green"} p={"5"}>
+            <Grid
+              p={"5"}
+              h={"100%"}
+              justifyContent={"center"}
+              textAlign={"center"}
+              templateRows="repeat(5,1fr)"
+              templateColumns="repeat(2, 1fr)"
+            >
+              <GridItem>
+                <Text>תיבת הילוכים</Text>
+                <Text>{technicalCarData?.automatic_ind}</Text>
+              </GridItem>
+              <GridItem>
+                <Text>נפח מנוע</Text>
+                <Text>{technicalCarData?.nefah_manoa}</Text>
+              </GridItem>
+              <GridItem>
+                <Text>כוח סוס</Text>
+                <Text>{technicalCarData?.koah_sus}</Text>
+              </GridItem>
+              <GridItem>
+                <Text></Text>
+                <Text></Text>
+              </GridItem>
+              <GridItem></GridItem>
+              <GridItem></GridItem>
+              <GridItem></GridItem>
+              <GridItem></GridItem>
+            </Grid>
           </Card>
         </HStack>
         {/* </ScaleFade> */}
