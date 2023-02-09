@@ -12,21 +12,27 @@ export const vehicleRouter = createTRPCRouter({
       );
       const basicData = (await basicDataRes.json()) as BasicDataRes;
 
+      let degem_cd = "";
+      let degem_nm = "";
+      let shnat_yitzur = "";
+
+      if (basicData && basicData.result && basicData.result.records[0]) {
+        degem_cd = basicData.result.records[0].degem_cd;
+        degem_nm = basicData.result.records[0].degem_nm;
+        shnat_yitzur = basicData.result.records[0].shnat_yitzur;
+      }
+
       const technicalDataRes = await fetch(
-        `https://data.gov.il/api/3/action/datastore_search?resource_id=142afde2-6228-49f9-8a29-9b6c3a0cbe40`,
+        `https://data.gov.il/api/3/action/datastore_search?resource_id=142afde2-6228-49f9-8a29-9b6c3a0cbe40&filters={"degem_cd": "${degem_cd}", "degem_nm": "${degem_nm}", "shnat_yitzur": "${shnat_yitzur}"}`,
         {
           method: "POST",
-          body: JSON.stringify({
-            filters: {
-              degem_cd: basicData.result.records[0]?.degem_cd,
-              degem_nm: basicData.result.records[0]?.degem_nm,
-              shnat_yitzur: basicData.result.records[0]?.shnat_yitzur,
-            },
-          }),
         }
       );
+
       const technicalData =
         (await technicalDataRes.json()) as TechnicalVehicleRes;
+
+      console.log(technicalData);
 
       return {
         basicData: basicData.result.records[0],
@@ -34,4 +40,3 @@ export const vehicleRouter = createTRPCRouter({
       };
     }),
 });
-

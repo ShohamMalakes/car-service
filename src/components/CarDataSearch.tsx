@@ -15,34 +15,29 @@ import {
 import React, { useRef, useState } from "react";
 import { BasicVehicle, TechnicalVehicle } from "../types/Vehicle";
 import { api } from "../utils/api";
-// import carPlateImg from "../images/car_plate1.png";
+import carPlateImg from "../images/car_plate1.png";
 
 function CarDataSearch() {
-  //   const data = api.vehicle.getData.useQuery({ license_plate: "4430086" });
   const [carNumber, setCarNumber] = useState<string>();
   const [carData, setCarData] = useState<BasicVehicle>();
 
-  const data = api.vehicle.getData.useQuery({
-    license_plate: carNumber!,
-  });
-  // const handleSearch = async () => {
-  //   await data(
-  //     {
-  //       license_plate: carNumber!,
-  //     },
-  //     {
-  //       onSuccess(data) {
-  //         console.log(data.data?.mispar_rechev);
-  //         setCarData(data.data);
-  //       },
-  //     }
-  //   );
-  // };
+  const { data, refetch } = api.vehicle.getData.useQuery(
+    {
+      license_plate: carNumber!,
+    },
+    {
+      onSuccess(response) {
+        setCarData(response.basicData);
+      },
+      enabled: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    }
+  );
 
   const carNumberLenghth = carNumber?.length;
   return (
     <>
-      {/* <Flex direction={"column"} bg={"pink"}> */}
       <Flex justify={"center"}>
         <Box
           boxSize={"sm"}
@@ -59,7 +54,7 @@ function CarDataSearch() {
             textColor={"black"}
             value={carNumber}
             textAlign={"center"}
-            // bgImage={carPlateImg.src}
+            bgImage={carPlateImg.src}
             fontSize={"3xl"}
             placeholder={"12-345-67"}
             _placeholder={{ color: "black" }}
@@ -69,12 +64,10 @@ function CarDataSearch() {
             onChange={(e) => setCarNumber(e.target.value)}
           ></Input>
           <Button
-            // _focus={{ bg: "none" }}
-            // _hover={{ bg: "none" }}
             isDisabled={
               !carNumber || carNumberLenghth! < 5 || carNumberLenghth! > 8
             }
-            // onClick={handleSearch}
+            onClick={refetch}
           >
             מצא רכב
           </Button>
@@ -85,8 +78,6 @@ function CarDataSearch() {
         </Box>
       </Flex>
       <Flex
-        // templateColumns="repeat(8, 1fr)"
-        // templateRows="repeat(5,1fr)"
         h={"55%"}
         w={"100%"}
         // bg={"red"}
@@ -224,7 +215,6 @@ function CarDataSearch() {
           <Text>{carData?.tzeva_rechev}</Text>
         </GridItem>
       </Flex>
-      {/* </Flex> */}
     </>
   );
 }
