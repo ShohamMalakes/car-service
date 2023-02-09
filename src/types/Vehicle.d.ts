@@ -35,7 +35,11 @@ export type TechnicalVehicle = {
   mispar_kariot_avir: string;
   hege_koah_ind: string;
   automatic_ind: string;
+  hanaa_nm: string;
+  technologiat_hanaa_nm: string;
   mispar_halonot_hashmal: string;
+  kosher_grira_im_blamim: string;
+  kosher_grira_bli_blamim: string;
   halon_bagg_ind: string;
   galgaley_sagsoget_kala_ind: string;
   argaz_ind: string;
@@ -68,4 +72,3 @@ export interface TechnicalVehicleRes {
     records: TechnicalVehicle[];
   };
 }
-
