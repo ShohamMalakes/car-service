@@ -5,10 +5,12 @@ import Link from "next/link";
 
 import { api } from "../utils/api";
 import CarDataSearch from "../components/CarDataSearch";
+import Navbar from "../components/NavBar";
 
 const Home: NextPage = () => {
   return (
     <>
+      <Navbar />
       <CarDataSearch />
     </>
   );
