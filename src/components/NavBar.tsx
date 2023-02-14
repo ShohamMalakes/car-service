@@ -1,6 +1,8 @@
-import { Link, Box, Flex, Button } from "@chakra-ui/react";
-
+import { Link, Box, Flex, Button, Image } from "@chakra-ui/react";
+import carServiceLogo from "../images/car_service_logo1.png";
+import { useUser } from "@auth0/nextjs-auth0/client";
 function Navbar() {
+  const { user } = useUser();
   return (
     <Flex
       as="nav"
@@ -10,24 +12,20 @@ function Navbar() {
       padding="1rem"
       bg="teal.500"
       color="white"
+      h={"9vh"}
       boxShadow="0px 4px 6px rgba(0, 0, 0, 1)"
     >
-      <Flex align="center" mr={5}>
-        <Link href="#">Your Logo</Link>
+      <Flex h={"5vh"} align="center" mr={5}>
+        <Image h={"150px"} src={carServiceLogo.src}></Image>
       </Flex>
 
-      <Box display={{ base: "block", md: "none" }} onClick={() => {}}>
-        <svg
-          fill="white"
-          width="12px"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <title>Menu</title>
-          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-        </svg>
-      </Box>
-
+      {!user ? (
+        <a href="/api/auth/login">Login</a>
+      ) : (
+        <a href="/api/auth/logout">Logout</a>
+      )}
+      {/* <Box display={{ base: "block", md: "none" }} onClick={() => {}}></Box> */}
+      {/* 
       <Box
         display={{ base: "none", md: "flex" }}
         width={{ base: "full", md: "auto" }}
@@ -43,10 +41,10 @@ function Navbar() {
         <Link href="#" mr={5}>
           Contact
         </Link>
-      </Box>
+      </Box> */}
 
       <Box>
-        <Button bg="transparent" border="1px">
+        <Button alignSelf={"center"} bg="transparent" border="1px">
           Sign Up
         </Button>
       </Box>

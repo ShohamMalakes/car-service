@@ -38,16 +38,6 @@ function CarDataSearch() {
       refetchOnReconnect: false,
     }
   );
-  const handleChange = (event: any) => {
-    let newValue = event.target.value.toUpperCase();
-    newValue = newValue.slice(0, 7);
-    let formattedValue = newValue.slice(0, 2) + "-";
-    formattedValue += newValue.slice(2, 5) + "-";
-    formattedValue += newValue.slice(5, 7);
-
-    setCarNumber(formattedValue);
-  };
-  console.log(carNumber);
 
   const carNumberLength = carNumber?.length;
   return (
@@ -58,33 +48,35 @@ function CarDataSearch() {
         alignItems={"center"}
         h={"37vh"}
       >
-        <Box
+        {/* <Box
           boxSize={"sm"}
           display={"flex"}
           justifyContent={"space-around"}
           alignItems={"center"}
-        >
-          <Input
-            w={"90%"}
-            h={"29.5%"}
-            min={5}
-            max={8}
-            textColor={"black"}
-            value={carNumber}
-            textAlign={"center"}
-            bgImage={carPlateImg.src}
-            fontSize={"5xl"}
-            placeholder={"12-345-67"}
-            _placeholder={{ color: "black", opacity: 0.5 }}
-            fontWeight={"bold"}
-            focusBorderColor={"none"}
-            autoComplete={"off"}
-            id={"carNumber"}
-            onChange={(e) => setCarNumber(e.target.value)}
-          ></Input>
-        </Box>
+        > */}
+        <Input
+          w={"346px"}
+          h={"81px"}
+          min={5}
+          max={8}
+          textColor={"black"}
+          value={carNumber}
+          textAlign={"center"}
+          bgImage={carPlateImg.src}
+          fontSize={"5xl"}
+          placeholder={"12-345-67"}
+          _placeholder={{ color: "black", opacity: 0.5 }}
+          fontWeight={"bold"}
+          focusBorderColor={"none"}
+          autoComplete={"off"}
+          id={"carNumber"}
+          onChange={(e) => setCarNumber(e.target.value)}
+        ></Input>
+        {/* </Box> */}
         <Flex h={"30%"} w={"100%"} gap={"10%"} justifyContent={"center"}>
           <Button
+            bgColor={"blue.500"}
+            color={"#FEFFFF"}
             isDisabled={
               !carNumber || carNumberLength! < 5 || carNumberLength! > 8
             }
@@ -92,11 +84,13 @@ function CarDataSearch() {
           >
             מצא רכב
           </Button>
-          {(carNumberLength! < 5 || carNumberLength! > 7) && (
-            <Text>מספר רכב צריך להיות בין 5-8 תווים</Text>
-          )}
-          <Button isDisabled>הוסף לרכבים שלי</Button>
+          <Button isDisabled bgColor={"blue.500"} color={"#FEFFFF"}>
+            הוסף לרכבים שלי
+          </Button>
         </Flex>
+        {(carNumberLength! < 5 || carNumberLength! > 7) && (
+          <Text color={"#FEFFFF"}>מספר רכב צריך להיות בין 5-8 תווים</Text>
+        )}
       </Flex>
       {carData && technicalCarData && (
         <AnimatePresence>
@@ -110,11 +104,10 @@ function CarDataSearch() {
             justifyContent={"space-around"}
           >
             <HStack
-              px="20px"
+              px="5px"
               spacing={"100px"}
               overflowX={"-moz-hidden-unscrollable"}
               overflowY={"hidden"}
-              // w={"full"}
             >
               <MotionFlex
                 minW="350px"
