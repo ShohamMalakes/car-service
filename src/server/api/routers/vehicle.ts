@@ -11,6 +11,7 @@ export const vehicleRouter = createTRPCRouter({
         `https://data.gov.il/api/3/action/datastore_search?resource_id=053cea08-09bc-40ec-8f7a-156f0677aff3&q=${input.license_plate}`
       );
       const basicData = (await basicDataRes.json()) as BasicDataRes;
+      console.log(basicData);
 
       let degem_cd = "";
       let degem_nm = "";

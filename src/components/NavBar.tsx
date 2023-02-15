@@ -1,4 +1,17 @@
-import { Link, Box, Flex, Button, Image } from "@chakra-ui/react";
+import {
+  Link,
+  Box,
+  Flex,
+  Button,
+  Image,
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuGroup,
+  MenuItem,
+  MenuDivider,
+} from "@chakra-ui/react";
 import carServiceLogo from "../images/car_service_logo1.png";
 import { useUser } from "@auth0/nextjs-auth0/client";
 function Navbar() {
@@ -15,40 +28,74 @@ function Navbar() {
       h={"9vh"}
       boxShadow="0px 4px 6px rgba(0, 0, 0, 1)"
     >
-      <Flex h={"5vh"} align="center" mr={5}>
-        <Image h={"150px"} src={carServiceLogo.src}></Image>
+      <Flex
+        h={"5vh"}
+        align="center"
+        mr={5}
+        bg={"black"}
+        w={"140px"}
+        borderRadius={"4px"}
+      >
+        <Link
+          href="/"
+          style={{ textDecoration: "none" }}
+          alignSelf={"center"}
+          bg="transparent"
+        >
+          <Image h={"150px"} src={carServiceLogo.src}></Image>
+        </Link>
       </Flex>
 
       {!user ? (
-        <a href="/api/auth/login">Login</a>
+        <Link
+          href="/api/auth/login"
+          style={{ textDecoration: "none" }}
+          alignSelf={"center"}
+          bg="transparent"
+        >
+          <Button border={"2px"}>התחבר</Button>
+        </Link>
       ) : (
-        <a href="/api/auth/logout">Logout</a>
+        <>
+          <Menu direction="rtl">
+            <MenuButton as={Button} colorScheme="none">
+              <Avatar src={user.picture}></Avatar>
+            </MenuButton>
+            <MenuList dir="rtl">
+              <MenuGroup title={user.name}>
+                <MenuItem>פרופיל</MenuItem>
+                <Link
+                  href="/garage"
+                  style={{ textDecoration: "none" }}
+                  alignSelf={"center"}
+                  bg="transparent"
+                >
+                  <MenuItem>הרכבים שלי</MenuItem>
+                </Link>
+                <Link
+                  href="/"
+                  style={{ textDecoration: "none" }}
+                  alignSelf={"center"}
+                  bg="transparent"
+                >
+                  <MenuItem>חיפוש רכב</MenuItem>
+                </Link>
+                <MenuDivider />
+                <Link
+                  href="/api/auth/logout"
+                  style={{ textDecoration: "none" }}
+                  alignSelf={"center"}
+                  bg="transparent"
+                >
+                  <MenuItem>התנתק </MenuItem>
+                </Link>
+              </MenuGroup>
+            </MenuList>
+          </Menu>
+        </>
       )}
-      {/* <Box display={{ base: "block", md: "none" }} onClick={() => {}}></Box> */}
-      {/* 
-      <Box
-        display={{ base: "none", md: "flex" }}
-        width={{ base: "full", md: "auto" }}
-        alignItems="center"
-        flexGrow={1}
-      >
-        <Link href="#" mr={5}>
-          Home
-        </Link>
-        <Link href="#" mr={5}>
-          About
-        </Link>
-        <Link href="#" mr={5}>
-          Contact
-        </Link>
-      </Box> */}
-
-      <Box>
-        <Button alignSelf={"center"} bg="transparent" border="1px">
-          Sign Up
-        </Button>
-      </Box>
     </Flex>
+    // </Flex>
   );
 }
 export default Navbar;

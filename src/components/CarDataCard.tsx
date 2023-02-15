@@ -18,15 +18,20 @@ import { api } from "../utils/api";
 import carPlateImg from "../images/car_plate1.png";
 import { AnimatePresence, motion } from "framer-motion";
 
-function CarDataCard() {
-  const [carNumber, setCarNumber] = useState<string>();
-  const [carData, setCarData] = useState<BasicVehicle>();
-  const [technicalCarData, setTechnicalCarData] = useState<TechnicalVehicle>();
+type Props = {
+  carData: BasicVehicle;
+  technicalCarData: TechnicalVehicle;
+  carNumber: string;
+};
+const CarDataCard: React.FunctionComponent<Props> = (props) => {
   const MotionFlex = motion(Flex);
+  const { data, isLoading, isError, error } = api.vehicle.getData.useQuery({
+    license_plate: "",
+  });
   const cards = [
     <>
       <MotionFlex
-        minW="700x"
+        minW="350px"
         h="50vh"
         borderRadius={"md"}
         flexDir={"column"}
@@ -38,70 +43,84 @@ function CarDataCard() {
         <Heading textAlign={"center"}>מפרט טכני ואבזור</Heading>
         <Grid
           p={"5"}
-          h={"100%"}
+          // h={"100%"}
           justifyContent={"center"}
           textAlign={"center"}
+          overflowY={"scroll"}
+          css={{
+            "&::-webkit-scrollbar": {
+              width: "4px",
+            },
+            "&::-webkit-scrollbar-track": {
+              width: "6px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "#FEFFF",
+              borderRadius: "24px",
+            },
+          }}
           templateRows="repeat(9,1fr)"
           templateColumns="repeat(2, 1fr)"
-          overflowY={"scroll"}
         >
           <GridItem>
             <Text>דגם מנוע</Text>
-            <Text>{carData?.degem_manoa}</Text>
+            <Text>{props.carData?.degem_manoa}</Text>
           </GridItem>
           <GridItem>
             <Text>סוג דלק</Text>
-            <Text>{carData?.sug_delek_nm}</Text>
+            <Text>{props.carData?.sug_delek_nm}</Text>
           </GridItem>
           <GridItem>
             <Text>צמיג קדמי</Text>
-            <Text>{carData?.zmig_kidmi}</Text>
+            <Text>{props.carData?.zmig_kidmi}</Text>
           </GridItem>
           <GridItem>
             <Text>צמיג אחורי</Text>
-            <Text>{carData?.zmig_ahori}</Text>
+            <Text>{props.carData?.zmig_ahori}</Text>
           </GridItem>
           <GridItem>
             <Text>תיבת הילוכים</Text>
-            {carData && (
+            {props.carData && (
               <Text>
-                {technicalCarData?.automatic_ind === "0" ? "ידנית" : "אוטומטית"}
+                {props.technicalCarData?.automatic_ind === "0"
+                  ? "ידנית"
+                  : "אוטומטית"}
               </Text>
             )}
           </GridItem>
           <GridItem>
             <Text>נפח מנוע</Text>
-            <Text>{technicalCarData?.nefah_manoa}</Text>
+            <Text>{props.technicalCarData?.nefah_manoa}</Text>
           </GridItem>
           <GridItem>
             <Text>כוח סוס</Text>
-            <Text>{technicalCarData?.koah_sus}</Text>
+            <Text>{props.technicalCarData?.koah_sus}</Text>
           </GridItem>
           <GridItem>
             <Text>הנעה</Text>
-            <Text>{technicalCarData?.hanaa_nm}</Text>
+            <Text>{props.technicalCarData?.hanaa_nm}</Text>
           </GridItem>
           <GridItem>
             <Text>טכנולוגיית הנעה</Text>
-            <Text>{technicalCarData?.technologiat_hanaa_nm}</Text>
+            <Text>{props.technicalCarData?.technologiat_hanaa_nm}</Text>
           </GridItem>
           <GridItem>
             <Text>מספר חלונות חשמל</Text>
-            <Text>{technicalCarData?.mispar_halonot_hashmal}</Text>
+            <Text>{props.technicalCarData?.mispar_halonot_hashmal}</Text>
           </GridItem>
           <GridItem>
             <Text>חלון בגג</Text>
-            {carData && (
+            {props.carData && (
               <Text>
-                {technicalCarData?.halon_bagg_ind === "0" ? "אין" : "יש"}
+                {props.technicalCarData?.halon_bagg_ind === "0" ? "אין" : "יש"}
               </Text>
             )}
           </GridItem>
           <GridItem>
             <Text> חישוקי סגסוגת</Text>
-            {carData && (
+            {props.carData && (
               <Text>
-                {technicalCarData?.galgaley_sagsoget_kala_ind === "0"
+                {props.technicalCarData?.galgaley_sagsoget_kala_ind === "0"
                   ? "אין"
                   : "יש"}
               </Text>
@@ -109,9 +128,10 @@ function CarDataCard() {
           </GridItem>
           <GridItem>
             <Text>חיישני לחץ אוויר</Text>
-            {carData && (
+            {props.carData && (
               <Text>
-                {technicalCarData?.hayshaney_lahatz_avir_batzmigim_ind === "0"
+                {props.technicalCarData?.hayshaney_lahatz_avir_batzmigim_ind ===
+                "0"
                   ? "אין"
                   : "יש"}
               </Text>
@@ -119,34 +139,34 @@ function CarDataCard() {
           </GridItem>
           <GridItem>
             <Text>מצלמת רוורס מקורית</Text>
-            {carData && (
+            {props.carData && (
               <Text>
-                {technicalCarData?.matzlemat_reverse_ind === "0" ? "אין" : "יש"}
+                {props.technicalCarData?.matzlemat_reverse_ind === "0"
+                  ? "אין"
+                  : "יש"}
               </Text>
             )}
           </GridItem>
           <GridItem>
             <Text>מספר דלתות</Text>
-            <Text>{technicalCarData?.mispar_dlatot}</Text>
+            <Text>{props.technicalCarData?.mispar_dlatot}</Text>
           </GridItem>
           <GridItem>
             <Text>משקל כולל</Text>
-            <Text>{technicalCarData?.mishkal_kolel}</Text>
+            <Text>{props.technicalCarData?.mishkal_kolel}</Text>
           </GridItem>
           <GridItem>
             <Text>כושר גרירה בלי בלמים</Text>
-            <Text>{technicalCarData?.kosher_grira_bli_blamim}</Text>
+            <Text>{props.technicalCarData?.kosher_grira_bli_blamim}</Text>
           </GridItem>
           <GridItem>
             <Text>כושר גרירה עם בלמים</Text>
-            <Text>{technicalCarData?.kosher_grira_im_blamim}</Text>
+            <Text>{props.technicalCarData?.kosher_grira_im_blamim}</Text>
           </GridItem>
         </Grid>
       </MotionFlex>
       <MotionFlex
-        // w={"full"}
-        // h={"50vh"}
-        minW="700x"
+        minW="350px"
         h="50vh"
         borderRadius={"md"}
         flexDir={"column"}
@@ -158,66 +178,77 @@ function CarDataCard() {
         <Heading textAlign={"center"}> פרטי הרכב</Heading>
         <Grid
           p={"5"}
-          h={"100%"}
+          // h={"100%"}
           justifyContent={"center"}
           textAlign={"center"}
+          overflowY={"auto"}
+          css={{
+            "&::-webkit-scrollbar": {
+              width: "4px",
+            },
+            "&::-webkit-scrollbar-track": {
+              width: "6px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "#FEFFF",
+              borderRadius: "24px",
+            },
+          }}
           templateRows="repeat(6,1fr)"
           templateColumns="repeat(2, 1fr)"
         >
           <GridItem>
             <Text>יצרן</Text>
-            <Text>{carData?.tozeret_nm}</Text>
+            <Text>{props.carData?.tozeret_nm}</Text>
           </GridItem>
           <GridItem>
             <Text>דגם</Text>
-            <Text>{carData?.kinuy_mishari}</Text>
+            <Text>{props.carData?.kinuy_mishari}</Text>
           </GridItem>
           <GridItem>
             <Text>שנת ייצור</Text>
-            <Text>{carData?.shnat_yitzur}</Text>
+            <Text>{props.carData?.shnat_yitzur}</Text>
           </GridItem>
           <GridItem>
             <Text>רמת גימור</Text>
-            <Text>{carData?.ramat_gimur}</Text>
+            <Text>{props.carData?.ramat_gimur}</Text>
           </GridItem>
           <GridItem>
             <Text>תאריך מבחן אחרון</Text>
-            <Text>{carData?.mivchan_acharon_dt}</Text>
+            <Text>{props.carData?.mivchan_acharon_dt}</Text>
           </GridItem>
           <GridItem>
             <Text>תוקף רישוי</Text>
-            <Text>{carData?.tokef_dt}</Text>
+            <Text>{props.carData?.tokef_dt}</Text>
           </GridItem>
           <GridItem>
             <Text>בעלות</Text>
-            <Text>{carData?.baalut}</Text>
+            <Text>{props.carData?.baalut}</Text>
           </GridItem>
           <GridItem>
             <Text>מספר שלדה</Text>
-            <Text>{carData?.misgeret}</Text>
+            <Text>{props.carData?.misgeret}</Text>
           </GridItem>
           <GridItem>
             <Text>מספר רכב</Text>
-            <Text>{carData?.mispar_rechev}</Text>
+            <Text>{props.carData?.mispar_rechev}</Text>
           </GridItem>
           <GridItem>
             <Text>קוד דגם</Text>
-            <Text>{carData?.degem_nm}</Text>
+            <Text>{props.carData?.degem_nm}</Text>
           </GridItem>
           <GridItem>
             <Text>קוד משרד התחבורה</Text>
-            <Text>{carData?.tozeret_cd}</Text>
+            <Text>{props.carData?.tozeret_cd}</Text>
           </GridItem>
           <GridItem>
             <Text>צבע הרכב</Text>
-            <Text>{carData?.tzeva_rechev}</Text>
+            <Text>{props.carData?.tzeva_rechev}</Text>
           </GridItem>
         </Grid>
       </MotionFlex>
       <MotionFlex
-        // w={"35wh"}
-        // h={"50vh"}
-        minW="700x"
+        minW="350px"
         h="50vh"
         borderRadius={"md"}
         flexDir={"column"}
@@ -237,19 +268,21 @@ function CarDataCard() {
         >
           <GridItem>
             <Text>מספר כריות אוויר</Text>
-            <Text>{technicalCarData?.mispar_kariot_avir}</Text>
+            <Text>{props.technicalCarData?.mispar_kariot_avir}</Text>
           </GridItem>
           <GridItem>
             <Text>מערכת ABS</Text>
-            {carData && (
-              <Text>{technicalCarData?.abs_ind === "0" ? "אין" : "יש"}</Text>
+            {props.carData && (
+              <Text>
+                {props.technicalCarData?.abs_ind === "0" ? "אין" : "יש"}
+              </Text>
             )}
           </GridItem>
           <GridItem>
             <Text>בקרת סטייה מנטיב</Text>
-            {carData && (
+            {props.carData && (
               <Text>
-                {technicalCarData?.bakarat_stiya_menativ_ind === "0"
+                {props.technicalCarData?.bakarat_stiya_menativ_ind === "0"
                   ? "אין"
                   : "יש"}
               </Text>
@@ -257,17 +290,19 @@ function CarDataCard() {
           </GridItem>
           <GridItem>
             <Text>בקרת יציבות</Text>
-            {carData && (
+            {props.carData && (
               <Text>
-                {technicalCarData?.bakarat_yatzivut_ind === "0" ? "אין" : "יש"}
+                {props.technicalCarData?.bakarat_yatzivut_ind === "0"
+                  ? "אין"
+                  : "יש"}
               </Text>
             )}
           </GridItem>
           <GridItem>
             <Text>מערכת לניטור מרחק מלפנים</Text>
-            {carData && (
+            {props.carData && (
               <Text>
-                {technicalCarData?.nitur_merhak_milfanim_ind === "0"
+                {props.technicalCarData?.nitur_merhak_milfanim_ind === "0"
                   ? "אין"
                   : "יש"}
               </Text>
@@ -275,9 +310,9 @@ function CarDataCard() {
           </GridItem>
           <GridItem>
             <Text>בקרת שיוט אדפטיבית</Text>
-            {carData && (
+            {props.carData && (
               <Text>
-                {technicalCarData?.bakarat_shyut_adaptivit_ind === "0"
+                {props.technicalCarData?.bakarat_shyut_adaptivit_ind === "0"
                   ? "אין"
                   : "יש"}
               </Text>
@@ -287,33 +322,22 @@ function CarDataCard() {
       </MotionFlex>
     </>,
   ];
-
   return (
     <>
-      {/* {carData && technicalCarData && ( */}
       <AnimatePresence>
-        <Flex
-          h={"55vh"}
-          //   w={"200wh"}
-          // bg={"red"}
-          border={"2px"}
-          borderRadius={"4px"}
-          dir={"rtl"}
-          justifyContent={"space-around"}
-          //   overflowX={"scroll"}
-        >
+        <Flex h={"54vh"} dir={"rtl"} justifyContent={"space-around"}>
           <HStack
-            px="100px"
+            px="5px"
+            overflowX={"-moz-hidden-unscrollable"}
+            overflowY={"hidden"}
             spacing={"100px"}
-            overflowX={"scroll"}
-            w={"full"}
-          ></HStack>
-          {cards}
+          >
+            {cards}
+          </HStack>
         </Flex>
       </AnimatePresence>
-      {/* )} */}
     </>
   );
-}
+};
 
 export default CarDataCard;
